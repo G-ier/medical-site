@@ -1,0 +1,232 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id               Int               @id @default(autoincrement())
+  auth0UserId      String            @unique @map("auth0_user_id")
+  email            String            @unique
+  name             String?
+  picture          String?
+  createdAt        DateTime          @default(now()) @map("created_at")
+  updatedAt        DateTime          @updatedAt @map("updated_at")
+  patient          Patient?
+  payments         Payment[]
+  progressSessions ProgressSession[]
+  subscriptions    Subscription[]
+
+  @@map("users")
+}
+
+model ProgressSession {
+  id             Int        @id @default(autoincrement())
+  sessionToken   String?    @unique @map("session_token")
+  userId         Int?       @map("user_id")
+  currentStepId  String?    @map("current_step_id")
+  completedSteps Json       @default("[]") @map("completed_steps")
+  stepData       Json       @default("{}") @map("step_data")
+  isAnonymous    Boolean    @default(true) @map("is_anonymous")
+  expiresAt      DateTime?  @map("expires_at")
+  createdAt      DateTime   @default(now()) @map("created_at")
+  updatedAt      DateTime   @updatedAt @map("updated_at")
+  completed      Boolean    @default(false) @map("completed")
+  formData       FormData[]
+  user           User?      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([sessionToken])
+  @@index([userId])
+  @@index([isAnonymous])
+  @@index([completed])
+  @@map("progress_sessions")
+}
+
+model FormData {
+  id                Int             @id @default(autoincrement())
+  progressSessionId Int             @map("progress_session_id")
+  stepId            String?         @map("step_id")
+  formData          Json            @map("form_data")
+  isValid           Boolean         @default(false) @map("is_valid")
+  validationErrors  Json?           @map("validation_errors")
+  createdAt         DateTime        @default(now()) @map("created_at")
+  updatedAt         DateTime        @updatedAt @map("updated_at")
+  formType          String          @default("onboarding_step") @map("form_type")
+  progressSession   ProgressSession @relation(fields: [progressSessionId], references: [id], onDelete: Cascade)
+
+  @@unique([progressSessionId, formType, stepId])
+  @@index([progressSessionId])
+  @@index([formType])
+  @@index([stepId])
+  @@map("form_data")
+}
+
+model Patient {
+  id                Int              @id @default(autoincrement())
+  userId            Int              @unique @map("user_id")
+  healthiePatientId String?          @unique @map("healthie_patient_id")
+  firstName         String           @map("first_name")
+  lastName          String           @map("last_name")
+  email             String           @unique
+  phoneNumber       String?          @map("phone_number")
+  dateOfBirth       String?          @map("date_of_birth")
+  gender            String?
+  height            String?
+  weight            String?
+  address           Json?
+  createdAt         DateTime         @default(now()) @map("created_at")
+  updatedAt         DateTime         @default(now()) @updatedAt @map("updated_at")
+  formSubmissions   FormSubmission[]
+  medicalRecords    MedicalRecord[]
+  user              User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  payments          Payment[]
+  subscriptions     Subscription[]
+
+  @@index([healthiePatientId])
+  @@map("patients")
+}
+
+model MedicalRecord {
+  id        Int      @id @default(autoincrement())
+  patientId Int      @map("patient_id")
+  formType  String   @map("form_type")
+  responses Json
+  metadata  Json?
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  patient   Patient  @relation(fields: [patientId], references: [id], onDelete: Cascade)
+
+  @@index([patientId])
+  @@index([formType])
+  @@map("medical_records")
+}
+
+model FormSubmission {
+  id             Int      @id @default(autoincrement())
+  patientId      Int      @map("patient_id")
+  formType       String   @map("form_type")
+  formName       String?  @map("form_name")
+  olhFormId      String?  @map("olh_form_id")
+  status         String   @default("pending")
+  submissionData Json
+  responseData   Json?
+  errorMessage   String?  @map("error_message")
+  submittedAt    DateTime @default(now()) @map("submitted_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
+  patient        Patient  @relation(fields: [patientId], references: [id], onDelete: Cascade)
+
+  @@index([patientId])
+  @@index([formType])
+  @@index([status])
+  @@map("form_submissions")
+}
+
+model Subscription {
+  id                   Int       @id @default(autoincrement())
+  userId               Int       @map("user_id")
+  patientId            Int?      @map("patient_id")
+  stripeSubscriptionId String    @unique @map("stripe_subscription_id")
+  stripeCustomerId     String    @map("stripe_customer_id")
+  stripePriceId        String    @map("stripe_price_id")
+  stripeProductId      String    @map("stripe_product_id")
+  status               String
+  currentPeriodStart   DateTime  @map("current_period_start")
+  currentPeriodEnd     DateTime  @map("current_period_end")
+  cancelAtPeriodEnd    Boolean   @default(false) @map("cancel_at_period_end")
+  productType          String    @map("product_type")
+  planType             String    @map("plan_type")
+  planName             String?   @map("plan_name")
+  amount               Int
+  currency             String    @default("usd")
+  healthieOfferingId   String?   @map("healthie_offering_id")
+  metadata             Json?     @default("{}")
+  createdAt            DateTime  @default(now()) @map("created_at")
+  updatedAt            DateTime  @updatedAt @map("updated_at")
+  canceledAt           DateTime? @map("canceled_at")
+  billingInterval      String    @map("billing_interval")
+  billingIntervalCount Int       @default(1) @map("billing_interval_count")
+  healthieUserId       String?   @map("healthie_user_id")
+  planDescription      String?   @map("plan_description")
+  payments             Payment[] @relation("SubscriptionPayments")
+  patient              Patient?  @relation(fields: [patientId], references: [id])
+  user                 User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([stripeSubscriptionId])
+  @@index([userId])
+  @@index([status])
+  @@map("subscriptions")
+}
+
+model Payment {
+  id                       Int                    @id @default(autoincrement())
+  userId                   Int                    @map("user_id")
+  patientId                Int?                   @map("patient_id")
+  stripePaymentIntentId    String?                @unique @map("stripe_payment_intent_id")
+  stripeCustomerId         String?                @map("stripe_customer_id")
+  stripeInvoiceId          String?                @map("stripe_invoice_id")
+  amount                   Int
+  currency                 String                 @default("usd")
+  status                   PaymentStatus
+  paymentMethod            String?                @map("payment_method")
+  productType              String                 @map("product_type")
+  planType                 String                 @map("plan_type")
+  planName                 String?                @map("plan_name")
+  servicesProvided         String?                @map("services_provided")
+  healthieInvoiceId        String?                @unique @map("healthie_invoice_id")
+  metadata                 Json?                  @default("{}")
+  paidAt                   DateTime?              @map("paid_at")
+  createdAt                DateTime               @default(now()) @map("created_at")
+  updatedAt                DateTime               @updatedAt @map("updated_at")
+  healthieBillingItemId    String?                @map("healthie_billing_item_id")
+  healthieCustomerDetailId String?                @map("healthie_customer_detail_id")
+  healthieOfferingId       String?                @map("healthie_offering_id")
+  currentPeriodEnd         DateTime?              @map("current_period_end")
+  currentPeriodStart       DateTime?              @map("current_period_start")
+  stripePriceId            String?                @map("stripe_price_id")
+  stripeProductId          String?                @map("stripe_product_id")
+  stripeSubscriptionId     String?                @map("stripe_subscription_id")
+  subscriptionStatus       String?                @map("subscription_status")
+  subscriptionId           Int?                   @map("subscription_id")
+  healthieInvoiceAmount    Int?                   @map("healthie_invoice_amount")
+  healthieInvoiceDueDate   DateTime?              @map("healthie_invoice_due_date")
+  healthieInvoiceNotes     String?                @map("healthie_invoice_notes")
+  healthieInvoicePaidDate  DateTime?              @map("healthie_invoice_paid_date")
+  healthieInvoiceUrl       String?                @map("healthie_invoice_url")
+  healthieLastSyncAt       DateTime?              @map("healthie_last_sync_at")
+  healthieInvoiceStatus    HealthieInvoiceStatus? @map("healthie_invoice_status")
+  patient                  Patient?               @relation(fields: [patientId], references: [id])
+  subscription             Subscription?          @relation("SubscriptionPayments", fields: [subscriptionId], references: [id])
+  user                     User                   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([stripePaymentIntentId])
+  @@index([stripeSubscriptionId])
+  @@index([subscriptionId])
+  @@index([userId])
+  @@index([status])
+  @@map("payments")
+}
+
+enum PaymentStatus {
+  PENDING
+  PROCESSING
+  SUCCEEDED
+  FAILED
+  CANCELLED
+  REFUNDED
+}
+
+enum HealthieInvoiceStatus {
+  PENDING
+  SENT
+  VIEWED
+  PAID
+  PARTIALLY_PAID
+  OVERDUE
+  CANCELLED
+  REFUNDED
+  FAILED
+  DISPUTED
+}

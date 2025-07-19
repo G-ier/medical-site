@@ -1,0 +1,1 @@
+export { AlcoholConsumptionWidget } from './ui/alcohol-consumption-widget'; 

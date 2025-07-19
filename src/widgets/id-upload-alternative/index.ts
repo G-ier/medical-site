@@ -1,0 +1,1 @@
+export { IdUploadAlternative } from './ui/id-upload-alternative';

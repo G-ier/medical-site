@@ -1,0 +1,1 @@
+export { EatingDisorderDiagnoses } from './ui/eating-disorder-diagnoses';

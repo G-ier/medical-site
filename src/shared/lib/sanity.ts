@@ -1,0 +1,700 @@
+import { createClient } from '@sanity/client'
+import imageUrlBuilder from '@sanity/image-url'
+
+// Sanity client configuration
+export const client = createClient({
+  projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID!,
+  dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || 'production',
+  useCdn: true,
+  apiVersion: '2025-07-13', // Use current date for API version
+  perspective: 'published', // Only fetch published content
+})
+
+// Image URL builder
+const builder = imageUrlBuilder(client)
+
+export function urlFor(source: any) {
+  if (!source || !source.asset) {
+    console.log('❌ Invalid source for urlFor:', source)
+    return { url: () => '/placeholder-image.png' }
+  }
+  
+  console.log('🔍 urlFor processing source:', 
+    source.asset._id ? 
+    `Asset ID: ${source.asset._id}` : 
+    'Source has no asset ID'
+  )
+  
+  try {
+    const imageBuilder = builder.image(source)
+    return imageBuilder
+  } catch (error) {
+    console.log('❌ Error in urlFor:', error)
+    return { url: () => '/placeholder-image.png' }
+  }
+}
+
+// Get a direct URL for a Sanity image (bypassing Next.js Image optimization)
+export function getSanityImageUrl(source: any): string {
+  if (!source || !source.asset) {
+    return '/placeholder-image.png';
+  }
+  
+  try {
+    // If we already have a URL directly, use it
+    if (source.asset.url) {
+      return source.asset.url;
+    }
+    
+    // Otherwise use the builder
+    return builder.image(source).url();
+  } catch (error) {
+    console.log('❌ Error getting direct Sanity image URL:', error);
+    return '/placeholder-image.png';
+  }
+}
+
+// Query for homepage data
+export const HOMEPAGE_QUERY = `*[_type == "homepage"][0]{
+  _id,
+  title,
+  heroSection{
+    heroTitle,
+    subtitle,
+    backgroundImage{
+      asset->,
+      alt,
+      width,
+      height
+    },
+    primaryCTA{
+      text,
+      href
+    },
+    secondaryCTA{
+      text,
+      href
+    }
+  },
+  treatmentsSection{
+    title,
+    subtitle,
+    description,
+    treatments[]{
+      title,
+      description,
+      image{
+        asset->,
+        alt,
+        width,
+        height
+      },
+      category,
+      badge{
+        text,
+        variant
+      },
+      ctaText,
+      ctaUrl
+    },
+    viewAllText,
+    viewAllUrl
+  },
+  categoriesSection{
+    title,
+    categories[]{
+      title,
+      image{
+        asset->,
+        alt,
+        width,
+        height
+      },
+      cta{
+        text,
+        href
+      }
+    }
+  },
+  statisticsSection{
+    statisticPreText,
+    statisticTimeframe,
+    statisticPostText,
+    calculatorTitle,
+    calculatorDefaultWeight,
+    calculatorMinWeight,
+    calculatorMaxWeight,
+    calculatorWeightLossPercentage,
+    calculatorResultText,
+    calculatorUnit,
+    backgroundImage{
+      asset->,
+      alt,
+      width,
+      height
+    }
+  },
+  gettingStartedSection{
+    title,
+    subtitle,
+    image{
+      asset->,
+      alt,
+      width,
+      height
+    },
+    steps[]{
+      title
+    },
+    primaryCTA{
+      text,
+      href
+    },
+    secondaryCTA{
+      text,
+      href
+    }
+  },
+  whyChooseSection{
+    title,
+    subtitle,
+    valuePropositions[]{
+      title,
+      description,
+      image{
+        asset->,
+        alt,
+        width,
+        height
+      }
+    }
+  },
+  testimonialsSection{
+    title,
+    testimonials[]{
+      companyLogo{
+        asset->,
+        alt,
+        width,
+        height
+      },
+      quote,
+      author{
+        name,
+        position,
+        company,
+        avatar{
+          asset->,
+          alt,
+          width,
+          height
+        }
+      }
+    }
+  },
+  ctaHeroSection{
+    heroTitle,
+    subtitle,
+    backgroundImage{
+      asset->,
+      alt,
+      width,
+      height
+    },
+    primaryCTA{
+      text,
+      href
+    },
+    secondaryCTA{
+      text,
+      href
+    }
+  },
+  seo{
+    metaTitle,
+    metaDescription
+  }
+}`
+
+// Test query specifically for hero section
+export const HERO_TEST_QUERY = `*[_type == "homepage"][0]{
+  heroSection{
+    heroTitle,
+    subtitle,
+    backgroundImage{
+      asset->,
+      alt,
+      width,
+      height
+    }
+  }
+}`
+
+// Global components queries
+export const GLOBAL_FAQ_QUERY = `*[_type == "globalFAQ"][0]{
+  _id,
+  title,
+  subtitle,
+  subtitleLinkText,
+  subtitleLinkUrl,
+  faqs[]{
+    question,
+    answer
+  },
+  contactTitle,
+  contactDescription,
+  contactButtonText,
+  contactButtonUrl
+}`
+
+export const GLOBAL_INFO_BAR_QUERY = `*[_type == "globalInfoBar"][0]{
+  _id,
+  trustIndicators[]{
+    text,
+    icon,
+    isTitle,
+    highlighted
+  }
+}`
+
+export const GLOBAL_FOOTER_QUERY = `*[_type == "globalFooter"][0]{
+  _id,
+  title,
+  contact{
+    phone,
+    email,
+    ctaText,
+    ctaHref
+  },
+  columns[]{
+    title,
+    links[]{
+      label,
+      href,
+      isExternal
+    }
+  },
+  socialLinks[]{
+    platform,
+    href
+  },
+  middleLinks[]{
+    label,
+    href
+  },
+  legalDisclaimer,
+  legalLinks[]{
+    label,
+    href
+  },
+  copyright
+}`
+
+// About Us Page Query (Content Only)
+export const ABOUT_US_QUERY = `*[_type == "aboutUsPage"][0]{
+  _id,
+  title,
+  heroSection{
+    heroTitle,
+    subtitle,
+    backgroundImage{
+      asset->,
+      alt,
+      width,
+      height
+    },
+    primaryCTA{
+      text,
+      href
+    },
+    secondaryCTA{
+      text,
+      href
+    }
+  },
+  medicalExpertsSection{
+    title,
+    subtitle,
+    description,
+    doctors[]->{
+      _id,
+      name,
+      title,
+      image{
+        asset->,
+        alt,
+        width,
+        height
+      },
+      bio,
+      displayOrder
+    }
+  },
+  labTestedSection{
+    title,
+    description,
+    additionalDescription,
+    backgroundImage{
+      asset->,
+      alt,
+      width,
+      height
+    },
+    tests[]{
+      testName,
+      statusLabel,
+      details
+    },
+    featuresTitle,
+    featuresDescription,
+    features[]{
+      label,
+      description
+    }
+  },
+  treatmentsSection{
+    title,
+    subtitle,
+    description,
+    treatments[]{
+      title,
+      description,
+      image{
+        asset->,
+        alt,
+        width,
+        height
+      },
+      category,
+      badge{
+        text,
+        variant
+      },
+      ctaText,
+      ctaUrl
+    },
+    viewAllText,
+    viewAllUrl
+  },
+  categoriesSection{
+    title,
+    categories[]{
+      title,
+      image{
+        asset->,
+        alt,
+        width,
+        height
+      },
+      cta{
+        text,
+        href
+      }
+    }
+  },
+  gettingStartedSection{
+    title,
+    subtitle,
+    image{
+      asset->,
+      alt,
+      width,
+      height
+    },
+    steps[]{
+      title
+    },
+    primaryCTA{
+      text,
+      href
+    },
+    secondaryCTA{
+      text,
+      href
+    }
+  },
+  testimonialsSection{
+    title,
+    testimonials[]{
+      companyLogo{
+        asset->,
+        alt,
+        width,
+        height
+      },
+      quote,
+      author{
+        name,
+        position,
+        company,
+        avatar{
+          asset->,
+          alt,
+          width,
+          height
+        }
+      }
+    }
+  },
+  seo{
+    metaTitle,
+    metaDescription
+  }
+}`
+
+// Weight Loss Solutions Page Query
+export const WEIGHT_LOSS_SOLUTIONS_QUERY = `*[_type == "weightLossSolutionsPage"][0]{
+  _id,
+  title,
+  heroSection{
+    heroTitle,
+    subtitle,
+    backgroundImage{
+      asset->,
+      alt,
+      width,
+      height
+    },
+    primaryCTA{
+      text,
+      href
+    },
+    trustFeatures[]{
+      iconType,
+      text
+    }
+  },
+  treatmentBenefitsSection{
+    benefits[]{
+      title,
+      description,
+      iconType
+    }
+  },
+  treatmentsSection{
+    title,
+    subtitle,
+    description,
+    treatments[]{
+      title,
+      description,
+      image{
+        asset->,
+        alt,
+        width,
+        height
+      },
+      category,
+      badge{
+        text,
+        variant
+      },
+      ctaText,
+      ctaUrl
+    },
+    viewAllText,
+    viewAllUrl
+  },
+  treatmentOptionsSection{
+    title,
+    medications[]{
+      image{
+        asset->,
+        alt,
+        width,
+        height
+      },
+      title,
+      subtitle,
+      price,
+      planDuration,
+      primaryCTA{
+        text,
+        href
+      },
+      secondaryCTA{
+        text,
+        href
+      },
+      disclaimer,
+      safetyInfo{
+        text,
+        href
+      }
+    }
+  },
+  statisticsSection{
+    statisticPreText,
+    statisticTimeframe,
+    statisticPostText,
+    calculatorTitle,
+    calculatorDefaultWeight,
+    calculatorMinWeight,
+    calculatorMaxWeight,
+    calculatorWeightLossPercentage,
+    calculatorResultText,
+    calculatorUnit,
+    backgroundImage{
+      asset->,
+      alt,
+      width,
+      height
+    }
+  },
+  weightLossOverviewSection{
+    firstStatistic{
+      preText,
+      mainText,
+      percentage,
+      timeframe,
+      description
+    },
+    secondStatistic{
+      preText,
+      mainText,
+      percentage,
+      timeframe,
+      titleAboveDescription,
+      description
+    },
+    healthGainsCard{
+      title,
+      description,
+      image{
+        asset->,
+        alt,
+        width,
+        height
+      }
+    },
+    overlappingImages{
+      primaryImage{
+        asset->,
+        alt,
+        width,
+        height
+      },
+      secondaryImage{
+        asset->,
+        alt,
+        width,
+        height
+      }
+    },
+    superchargeGoals{
+      mainText,
+      highlightedText,
+      goals[]{
+        image{
+          asset->,
+          alt,
+          width,
+          height
+        },
+        title,
+        description
+      }
+    }
+  },
+  labTestedSection{
+    title,
+    description,
+    additionalDescription,
+    backgroundImage{
+      asset->,
+      alt,
+      width,
+      height
+    },
+    tests[]{
+      testName,
+      statusLabel,
+      details
+    },
+    featuresTitle,
+    featuresDescription,
+    features[]{
+      label,
+      description
+    }
+  },
+  gettingStartedSection{
+    title,
+    subtitle,
+    image{
+      asset->,
+      alt,
+      width,
+      height
+    },
+    steps[]{
+      title
+    },
+    primaryCTA{
+      text,
+      href
+    },
+    secondaryCTA{
+      text,
+      href
+    }
+  },
+  ctaHeroSection{
+    heroTitle,
+    subtitle,
+    backgroundImage{
+      asset->,
+      alt,
+      width,
+      height
+    },
+    primaryCTA{
+      text,
+      href
+    },
+    secondaryCTA{
+      text,
+      href
+    }
+  },
+  seo{
+    metaTitle,
+    metaDescription
+  }
+}`
+
+// Contact Page Query
+export const CONTACT_QUERY = `*[_type == "contactPage"][0]{
+  _id,
+  title,
+  contactHeroSection{
+    heroTitle,
+    subtitle,
+    backgroundImage{
+      asset->,
+      alt,
+      width,
+      height
+    },
+    primaryCTA{
+      text,
+      href
+    },
+    secondaryCTA{
+      text,
+      href
+    },
+    contactInfo{
+      phone,
+      email,
+      office{
+        address,
+        city
+      }
+    }
+  },
+  seo{
+    metaTitle,
+    metaDescription
+  }
+}` 

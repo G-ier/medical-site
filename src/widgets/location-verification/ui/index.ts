@@ -1,0 +1,1 @@
+export { LocationVerificationWidget } from './location-verification-widget'; 

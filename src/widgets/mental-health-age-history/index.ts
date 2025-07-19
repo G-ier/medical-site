@@ -1,0 +1,1 @@
+export { MentalHealthAgeHistory } from './ui/mental-health-age-history';

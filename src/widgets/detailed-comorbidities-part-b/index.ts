@@ -1,0 +1,1 @@
+export { DetailedComorbiditiesPartB } from './ui/detailed-comorbidities-part-b'; 

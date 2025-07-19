@@ -1,0 +1,1 @@
+export { Gad7ImpactAssessment } from './ui/gad7-impact-assessment';

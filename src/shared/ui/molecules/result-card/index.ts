@@ -1,0 +1,1 @@
+export { ResultCard, type ResultCardProps } from './result-card'; 

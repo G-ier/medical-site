@@ -1,0 +1,1 @@
+export { AgeVerificationWidget } from './age-verification-widget'; 

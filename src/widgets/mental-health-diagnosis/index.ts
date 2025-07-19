@@ -1,0 +1,1 @@
+export { MentalHealthDiagnosis } from './ui/mental-health-diagnosis';

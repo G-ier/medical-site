@@ -1,0 +1,1 @@
+export { SsnIdentityVerification } from './ui/ssn-identity-verification';

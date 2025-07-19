@@ -1,0 +1,1 @@
+export { AllergiesWidget } from './ui/allergies-widget'; 

@@ -1,0 +1,1 @@
+export { MedicalProfile } from './ui/medical-profile'; 

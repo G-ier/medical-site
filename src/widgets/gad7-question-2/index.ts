@@ -1,0 +1,1 @@
+export { Gad7Question2 } from './ui/gad7-question-2';

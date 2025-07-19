@@ -1,0 +1,1 @@
+export { HeartRateAssessmentWidget } from './ui/heart-rate-assessment-widget'; 

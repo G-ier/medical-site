@@ -1,0 +1,8 @@
+<!-- Placeholder for Angry mood emoji SVG -->
+<!-- Replace this file with your Angry emoji SVG -->
+<svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <circle cx="24" cy="24" r="24" fill="#FF6B6B"/>
+  <path d="M12 16 L18 20 L14 24" stroke="#333" stroke-width="2" fill="none"/>
+  <path d="M36 16 L30 20 L34 24" stroke="#333" stroke-width="2" fill="none"/>
+  <rect x="18" y="30" width="12" height="4" fill="#333"/>
+</svg> 

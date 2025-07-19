@@ -1,0 +1,8 @@
+<!-- Placeholder for Stressed mood emoji SVG -->
+<!-- Replace this file with your Stressed emoji SVG -->
+<svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <circle cx="24" cy="24" r="24" fill="#FFE066"/>
+  <path d="M14 18 L18 22 M18 18 L14 22" stroke="#333" stroke-width="2"/>
+  <path d="M30 18 L34 22 M34 18 L30 22" stroke="#333" stroke-width="2"/>
+  <rect x="20" y="28" width="8" height="4" fill="#333"/>
+</svg> 

@@ -1,0 +1,1 @@
+export { PaymentButton, type PaymentButtonProps } from './payment-button'; 

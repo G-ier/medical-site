@@ -1,0 +1,1 @@
+export { GoalWeightQuestion } from './ui/goal-weight-question'; 

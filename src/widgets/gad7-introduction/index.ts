@@ -1,0 +1,1 @@
+export { Gad7Introduction } from './ui/gad7-introduction';

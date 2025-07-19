@@ -1,0 +1,1 @@
+export { LocationSuccessAge } from './ui/location-success-age'; 
