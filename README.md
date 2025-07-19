@@ -1,5 +1,19 @@
 # Rejuve Meds - Next.js Application
 
+---
+
+## ☕ Support This Project
+
+### 🎯 **LOVE THIS PROJECT? SHOW YOUR SUPPORT!**
+
+**Your donations help keep this project alive and growing! Every coffee counts! ☕**
+
+### 💝 **[DONATE NOW ➤ coff.ee/gier](https://coff.ee/gier)**
+
+*Thank you for supporting open source development! Your generosity fuels innovation and helps maintain this project for everyone to enjoy.*
+
+---
+
 A modern web application for medical onboarding, built with Next.js and integrated with Auth0, PostgreSQL, Prisma ORM, and Sanity CMS.
 
 ## 🚀 Tech Stack
