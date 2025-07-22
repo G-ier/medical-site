@@ -50,7 +50,7 @@ export function HeartRateAssessmentWidget({ className }: HeartRateAssessmentWidg
     return (
         <QAPageTemplate
             title={<GradientText gradient="purple-blue">
-                Rejuve
+                our platform
             </GradientText>}
             titleClassName="font-[500] tracking-wide text-[24px]"
             question="What is your average resting heart rate?"

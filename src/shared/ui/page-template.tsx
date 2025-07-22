@@ -117,9 +117,9 @@ const defaultInfoBarConfig: InfoBarConfig = {
 // Default footer configuration for homepage
 const defaultFooterConfig: FooterConfig = {
   contact: {
-    logoText: "rejuve",
-    phone: "(302) 204-2197",
-    email: "care@rejuvemeds.com",
+    logoText: "healthplatform",
+    phone: "(555) 123-4567",
+    email: "care@healthplatform.com",
     ctaText: "Find your plan",
     ctaHref: "/consultation"
   },
@@ -145,27 +145,25 @@ const defaultFooterConfig: FooterConfig = {
     }
   ],
   socialLinks: [
-    { platform: "facebook", href: "https://facebook.com/rejuvemeds" },
-    { platform: "instagram", href: "https://instagram.com/rejuvemeds" },
-    { platform: "twitter", href: "https://twitter.com/rejuvemeds" },
-    { platform: "tiktok", href: "https://tiktok.com/@rejuvemeds" },
-    { platform: "linkedin", href: "https://linkedin.com/company/rejuvemeds" }
+    { platform: "facebook", href: "https://facebook.com/healthplatform" },
+    { platform: "instagram", href: "https://instagram.com/healthplatform" },
+    { platform: "twitter", href: "https://twitter.com/healthplatform" },
+    { platform: "tiktok", href: "https://tiktok.com/@healthplatform" },
+    { platform: "linkedin", href: "https://linkedin.com/company/healthplatform" }
   ],
   middleLinks: [
-    { label: "About Rejuve", href: "/about" },
+    { label: "About Us", href: "/about" },
     { label: "Contact Us", href: "/contact" }
   ],
   complianceInfo: {
-    compoundedText: "Compounded in the U.S.A.",
+    compoundedText: "Compounded products have not been approved by the FDA. This product is compounded by licensed pharmacies that meet strict FDA standards."
   },
-  legalDisclaimer: "Prescription products require an online evaluation with an independent licensed medical professional who will determine if a prescription is appropriate. See important safety information. Medications are prescribed by independent licensed physicians as part of our programs. Adult product packaging may appear different than shown. Physicians may prescribe compounded medications as needed to meet patient requirements. which can be filled so that patients with disabilities have full and equal enjoyment of Eden's online goods, services, facilities, privileges, advantages, and accommodations. To provide feedback concerning the accessibility of the website, please contact. data to create custom audiences for targeted advertising and to exclude existing customers from certain marketing campaigns. You can opt out of receiving marketing emails at any time by following the unsubscribe instructions provided in each email or by contacting us directly at care@rejuvemeds.com. At Rejuve Meds, we believe in empowering individuals on their weight loss journey by providing access to licensed providers who may prescribe treatments for metabolic health. Our commitment to transparent pricing is reflected in our Same Price philosophy. This ensures predictability in your costs—you will pay the same price for your medication regardless of lifestyle adjustments throughout your program. Please note that this may exclude any new member discounts or specific plans. Terms and conditions apply. Rejuve Meds is committed to ensuring digital accessibility so that persons with disabilities have full and equal enjoyment of Eden's goods, services, facilities, privileges, advantages, and accommodations. To provide feedback concerning the accessibility of th website, please contact.",
+  legalDisclaimer: "This information is provided for educational purposes only and is not intended as medical advice. Please consult with a healthcare provider for personalized medical recommendations. Results may vary. By providing your email or phone number, you consent to receive marketing communications. You can unsubscribe at any time. For questions or concerns, contact us directly at care@healthplatform.com. At Health Platform, we believe in empowering individuals on their weight loss journey by providing access to licensed providers who may prescribe treatments for metabolic health. Our commitment to transparency and customer satisfaction drives everything we do. These statements have not been evaluated by the Food and Drug Administration. These products are not intended to diagnose, treat, cure, or prevent any disease. Individual results may vary and are not guaranteed. Please read all terms and conditions before purchasing. The use of these products may not be appropriate for everyone. Please consult with your healthcare provider before starting any new treatment. Pricing is subject to change and may vary based on specific plans. Terms and conditions apply. Health Platform is committed to ensuring digital accessibility so that persons with disabilities have full and equal enjoyment of Eden's goods, services, facilities, privileges, advantages, and accommodations.",
   legalLinks: [
     { label: "Terms of Service", href: "/terms" },
-    { label: "Privacy Policy", href: "/privacy" },
-    { label: "My Health Data Privacy Policy", href: "/health-privacy" },
-    { label: "Important Safety Information", href: "/safety" }
+    { label: "Privacy Policy", href: "/privacy" }
   ],
-  copyright: "2025 Rejuve Meds, International Inc. All rights reserved."
+  copyright: "2025 Health Platform, International Inc. All rights reserved."
 }
 
 export async function PageTemplate({
@@ -219,7 +217,7 @@ export async function PageTemplate({
       // Set footer config if not provided
       finalFooterConfig = globalData.globalFooter ? {
         contact: {
-          logoText: "rejuve", // Keep static as per requirements
+          logoText: "healthplatform", // Keep static as per requirements
           phone: globalData.globalFooter.contact.phone,
           email: globalData.globalFooter.contact.email,
           ctaText: globalData.globalFooter.contact.ctaText,

@@ -205,8 +205,8 @@ export class ProgressApiService {
     this.sessionToken = null;
     if (typeof window !== 'undefined') {
       localStorage.removeItem('onboarding_session_token');
-      localStorage.removeItem('rejuve_session_token'); // Clean up old token
-      localStorage.removeItem('rejuve_onboarding_progress'); // Also clear old localStorage progress
+          localStorage.removeItem('health_platform_session_token'); // Clean up old token
+    localStorage.removeItem('health_platform_onboarding_progress'); // Also clear old localStorage progress
     }
   }
 

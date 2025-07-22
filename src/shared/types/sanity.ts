@@ -143,6 +143,17 @@ export interface InfoBarSection {
   trustIndicators: TrustIndicator[]
 }
 
+export interface WeightLossIntroSection {
+  title: string
+  subtitle: string
+  medications: {
+    title: string
+    price: string
+    cta: CTA
+    image?: SanityImage
+  }[]
+}
+
 // About Us Page Types (Content Only)
 export interface Doctor {
   _id: string
@@ -186,6 +197,7 @@ export interface LabTestedSection {
 export interface Homepage {
   _id: string
   title: string
+  weightLossIntroSection?: WeightLossIntroSection
   heroSection: HeroSection
   treatmentsSection: TreatmentsSection
   categoriesSection: CategoriesSection

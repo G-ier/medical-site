@@ -12,17 +12,17 @@ import type { Metadata } from "next"
 
 // Hardcoded contact data as fallback
 const fallbackContactHeroData = {
-  heroTitle: "Contact Rejuve",
+  heroTitle: "Contact Us",
   subtitle: "Get in touch with our team for support, questions, or to learn more about our personalized healthcare solutions.",
   backgroundImage: {
     src: "/images/contact-hero-bg.jpg",
-    alt: "Contact Rejuve - Customer Support",
+    alt: "Contact Us - Customer Support",
     width: 1920,
     height: 1080
   },
   primaryCTA: {
     text: "Send Message",
-    href: "mailto:info@rejuve.com"
+    href: "mailto:info@healthplatform.com"
   },
   secondaryCTA: {
     text: "Call Us",
@@ -30,7 +30,7 @@ const fallbackContactHeroData = {
   },
   contactInfo: {
     phone: "(302) 204-2197",
-    email: "info@rejuve.com",
+    email: "info@healthplatform.com",
     office: {
       address: "110 16th St, Ste 1431",
       city: "Los Angeles, CA 80202"
@@ -48,14 +48,14 @@ export async function generateMetadata(): Promise<Metadata> {
     if (!data) {
       console.warn('No contact page data found in Sanity, using fallback SEO')
       return {
-        title: 'Contact Us - Rejuve Meds',
-        description: 'Get in touch with Rejuve Meds for personalized weight loss solutions and medical consultations.',
+        title: 'Contact Us - Health Platform',
+        description: 'Get in touch with Health Platform for personalized weight loss solutions and medical consultations.',
       }
     }
 
     const seoData = {
-      title: data.seo?.metaTitle || 'Contact Us - Rejuve Meds',
-      description: data.seo?.metaDescription || 'Get in touch with Rejuve Meds for personalized weight loss solutions and medical consultations.',
+      title: data.seo?.metaTitle || 'Contact Us - Health Platform',
+      description: data.seo?.metaDescription || 'Get in touch with Health Platform for personalized weight loss solutions and medical consultations.',
     }
 
     // Validate SEO data (this returns warnings array, not transformed data)
@@ -68,8 +68,8 @@ export async function generateMetadata(): Promise<Metadata> {
   } catch (error) {
     console.error('Error generating contact page metadata:', error)
     return {
-      title: 'Contact Us - Rejuve Meds',
-      description: 'Get in touch with Rejuve Meds for personalized weight loss solutions and medical consultations.',
+      title: 'Contact Us - Health Platform',
+      description: 'Get in touch with Health Platform for personalized weight loss solutions and medical consultations.',
     }
   }
 }
@@ -100,7 +100,7 @@ export default async function ContactPage() {
           background: "white"
         }}
       >
-        {/* Hero Section - Contact Rejuve */}
+        {/* Hero Section - Contact Us */}
         <ContactHeroSection
           heroTitle={pageData.contactHeroData.heroTitle}
           subtitle={pageData.contactHeroData.subtitle}

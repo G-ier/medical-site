@@ -27,7 +27,7 @@ export function BeforeTreatment() {
     >
         <div className="max-w-[875px] mx-auto space-y-12">
             <p className="text-[60px] font-light text-black text-center">
-                Before we get your treatment options, let’s talk about <GradientText gradient="purple-blue">what you can expect</GradientText> with Rejuve.
+                Before we get your treatment options, let’s talk about <GradientText gradient="purple-blue">what you can expect</GradientText> with our platform.
             </p>
         </div>
     </QAPageTemplate>

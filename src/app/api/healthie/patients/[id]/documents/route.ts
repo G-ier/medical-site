@@ -1,6 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { healthieClient } from '@/shared/api/healthie';
 
+// Configure API route to handle larger payloads (10MB for base64 files)
+export const config = {
+  api: {
+    bodyParser: {
+      sizeLimit: '10mb',
+    },
+  },
+}
+
 const CREATE_DOCUMENT_MUTATION = `
   mutation CreateDocument($input: createDocumentInput!) {
     createDocument(input: $input) {

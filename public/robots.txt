@@ -15,7 +15,7 @@ Allow: /contact
 Allow: /weight-loss-solutions
 
 # Sitemap location
-Sitemap: https://rejuvemeds.com/sitemap.xml
+Sitemap: https://localhost:3004/sitemap.xml
 
 # Crawl delay (optional)
 Crawl-delay: 1

@@ -1,5 +1,4 @@
 import { NextResponse, type NextRequest } from 'next/server';
-import { auth0 } from '@/shared/lib/auth0';
 import { AuthMiddleware } from '@/shared/lib/auth/auth-middleware';
 
 export async function middleware(request: NextRequest) {
@@ -20,9 +19,10 @@ export async function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
-  // Let Auth0 middleware handle Auth0 routes
-  if (pathname.startsWith('/auth')) {
-    return await auth0.middleware(request);
+  // Allow Auth0 routes to function
+  if (pathname.startsWith('/auth/')) {
+    console.log('🔐 Auth0 route accessed:', pathname);
+    return NextResponse.next();
   }
 
   // Protected pages that require authentication

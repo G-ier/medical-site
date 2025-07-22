@@ -25,6 +25,7 @@ import { treatmentBenefitsSectionSchema } from './sections/treatmentBenefitsSect
 import { treatmentOptionsSectionSchema } from './sections/treatmentOptionsSection'
 import { weightLossOverviewSectionSchema } from './sections/weightLossOverviewSection'
 import { contactHeroSectionSchema } from './sections/contactHeroSection'
+import weightLossIntroSectionSchema from './sections/weightLossIntroSection'
 
 // Pages
 import { homepageSchema } from './pages/homepage'
@@ -59,6 +60,7 @@ export {
   treatmentOptionsSectionSchema,
   weightLossOverviewSectionSchema,
   contactHeroSectionSchema,
+  weightLossIntroSectionSchema,
   homepageSchema,
   aboutUsPageSchema,
   weightLossSolutionsPageSchema,
@@ -99,6 +101,7 @@ export const schemaTypes = [
   treatmentOptionsSectionSchema,
   weightLossOverviewSectionSchema,
   contactHeroSectionSchema,
+  weightLossIntroSectionSchema,
   
   // Pages (must be defined last as they reference sections)
   homepageSchema,

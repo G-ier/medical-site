@@ -247,8 +247,8 @@ export function useBackendAuth(): BackendAuthState & BackendAuthActions {
       // Clear migration tokens
       if (typeof window !== 'undefined') {
         localStorage.removeItem('onboarding_session_token');
-        localStorage.removeItem('rejuve_session_token');
-        localStorage.removeItem('rejuve_onboarding_progress');
+            localStorage.removeItem('health_platform_session_token');
+    localStorage.removeItem('health_platform_onboarding_progress');
       }
 
       // Clear backend authentication first

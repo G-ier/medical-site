@@ -55,8 +55,7 @@ const HeaderMinimal = React.forwardRef<HTMLElement, HeaderMinimalProps>(
       { label: "Home", href: "/" },
       { label: "About Us", href: "/about-us" },
       { label: "Contact", href: "/contact" },
-      { label: "Weight Loss", href: "/weight-loss-solutions" },
-      { label: "Login", href: "/dashboard" },
+      { label: "Weight Loss", href: "/weight-loss-solutions" }
     ],
     ...props 
   }, ref) => {
@@ -124,9 +123,21 @@ const HeaderMinimal = React.forwardRef<HTMLElement, HeaderMinimalProps>(
               )}
             </div>
 
-            {/* Menu Button - Right */}
-            {showMenuButton && (
-              <div className="relative">
+            {/* Login Button and Menu Button - Right */}
+            <div className="flex items-center gap-4">
+              {/* Login Button */}
+              <Button
+                href="/auth/login"
+                variant="outline"
+                size="sm"
+                className="bg-white border-gray-300 text-gray-700 hover:bg-gray-50 rounded-2xl px-6 py-2"
+              >
+                Log in
+              </Button>
+
+              {/* Menu Button */}
+              {showMenuButton && (
+                <div className="relative">
                 <Button
                   ref={buttonRef}
                   variant="ghost"
@@ -219,8 +230,9 @@ const HeaderMinimal = React.forwardRef<HTMLElement, HeaderMinimalProps>(
                     </div>
                   </div>
                 </>
-              </div>
-            )}
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </header>

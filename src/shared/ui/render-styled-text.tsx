@@ -2,9 +2,9 @@ import React from "react";
 
 /**
  * Universal styled text renderer.
- * Supports [gradient]...[/gradient] for gradient text.
+ * Supports [gradient]...[/gradient] for gradient text and [br] for line breaks.
  * Easily extensible for other tags (e.g., [bold], [italic]) in the future.
- * Usage: renderStyledText('Your first step to [gradient]feeling your best[/gradient]')
+ * Usage: renderStyledText('Weight Loss[br]tailored to you')
  */
 export function renderStyledText(text: string): React.ReactNode {
   if (!text) return text;
@@ -20,6 +20,21 @@ export function renderStyledText(text: string): React.ReactNode {
 
   // Recursive function to handle nested/overlapping tags if needed
   function parse(str: string): React.ReactNode {
+    // Handle [br] tags first (self-closing)
+    const brIndex = str.indexOf('[br]');
+    if (brIndex !== -1) {
+      const before = str.slice(0, brIndex);
+      const after = str.slice(brIndex + 4); // '[br]' is 4 characters
+      return (
+        <>
+          {parse(before)}
+          <br />
+          {parse(after)}
+        </>
+      );
+    }
+
+    // Handle other tags with opening/closing pairs
     for (const { tag, className } of TAGS) {
       const open = `[${tag}]`;
       const close = `[/${tag}]`;

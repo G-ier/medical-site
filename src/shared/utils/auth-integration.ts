@@ -121,7 +121,7 @@ export async function isBackendAuthenticated(): Promise<{
 export function getMigrationToken(): string | null {
   if (typeof window === 'undefined') return null;
   return localStorage.getItem('onboarding_session_token') || 
-         localStorage.getItem('rejuve_session_token') || 
+         localStorage.getItem('health_platform_session_token') || 
          null;
 }
 
@@ -133,7 +133,7 @@ export function setMigrationToken(token: string): void {
 export function clearMigrationToken(): void {
   if (typeof window === 'undefined') return;
   localStorage.removeItem('onboarding_session_token');
-  localStorage.removeItem('rejuve_session_token'); // Clean up old token
+      localStorage.removeItem('health_platform_session_token'); // Clean up old token
 }
 
 /**
@@ -334,8 +334,8 @@ export async function enhancedLogout(): Promise<void> {
     // Step 2: Clear any local storage
     if (typeof window !== 'undefined') {
       localStorage.removeItem('onboarding_session_token');
-      localStorage.removeItem('rejuve_session_token');
-      localStorage.removeItem('rejuve_onboarding_progress');
+          localStorage.removeItem('health_platform_session_token');
+    localStorage.removeItem('health_platform_onboarding_progress');
     }
 
     // Step 3: Redirect to Auth0 logout which will clear Auth0 session

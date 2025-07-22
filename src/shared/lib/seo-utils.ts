@@ -1,12 +1,12 @@
 import type { Metadata, Viewport } from "next"
 
 // Default SEO values
-export const DEFAULT_SEO = {
-  siteName: "Rejuve Meds",
-  siteUrl: "https://rejuvemeds.com",
-  defaultTitle: "Rejuve Meds - Feel Better. Look Better. Live Better.",
+export const seoConfig = {
+  siteName: "Health Platform",
+  siteUrl: "https://localhost:3004",
+  defaultTitle: "Health Platform - Feel Better. Look Better. Live Better.",
   defaultDescription: "Personalized treatments for weight loss, skincare, and wellness delivered discreetly to your door.",
-  twitterHandle: "@rejuvemeds",
+  twitterHandle: "@healthplatform",
 } as const
 
 // Generate complete metadata with fallbacks
@@ -23,19 +23,19 @@ export function generateSEOMetadata({
   image?: string
   type?: string
 }): Metadata {
-  const fullTitle = title || DEFAULT_SEO.defaultTitle
-  const fullDescription = description || DEFAULT_SEO.defaultDescription
-  const fullUrl = `${DEFAULT_SEO.siteUrl}${path}`
-  const defaultImage = `${DEFAULT_SEO.siteUrl}/og-image.jpg`
+  const fullTitle = title || seoConfig.defaultTitle
+  const fullDescription = description || seoConfig.defaultDescription
+  const fullUrl = `${seoConfig.siteUrl}${path}`
+  const defaultImage = `${seoConfig.siteUrl}/og-image.jpg`
   const imageUrl = image || defaultImage
   
   return {
     title: fullTitle,
     description: fullDescription,
     keywords: ["weight loss", "skincare", "wellness", "telemedicine", "personalized treatments", "medical consultation"],
-    authors: [{ name: DEFAULT_SEO.siteName }],
-    creator: DEFAULT_SEO.siteName,
-    publisher: DEFAULT_SEO.siteName,
+    authors: [{ name: seoConfig.siteName }],
+    creator: seoConfig.siteName,
+    publisher: seoConfig.siteName,
     formatDetection: {
       email: false,
       address: false,
@@ -46,7 +46,7 @@ export function generateSEOMetadata({
       description: fullDescription,
       type: type as any,
       url: fullUrl,
-      siteName: DEFAULT_SEO.siteName,
+      siteName: seoConfig.siteName,
       locale: "en_US",
       images: [{
         url: imageUrl,
@@ -59,8 +59,8 @@ export function generateSEOMetadata({
       card: "summary_large_image",
       title: fullTitle,
       description: fullDescription,
-      site: DEFAULT_SEO.twitterHandle,
-      creator: DEFAULT_SEO.twitterHandle,
+      site: seoConfig.twitterHandle,
+      creator: seoConfig.twitterHandle,
       images: [{
         url: imageUrl,
         alt: fullTitle,

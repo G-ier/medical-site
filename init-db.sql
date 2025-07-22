@@ -1,14 +1,16 @@
--- Database initialization for Rejuve Meds
--- This file will be executed when PostgreSQL container starts
+-- Database initialization for Health Platform
+-- This script creates the database structure for the health platform application
 
--- Create extensions if needed
-CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+-- Create databases
+CREATE DATABASE health_platform_dev;
+CREATE DATABASE health_platform_test;
 
--- The database and user are already created by Docker environment variables
--- rejuve_meds_dev database with rejuve_user
+-- Create user
+-- health_platform_dev database with health_platform_user
+CREATE USER IF NOT EXISTS health_platform_user@'%' IDENTIFIED BY 'health_platform_password';
+GRANT ALL PRIVILEGES ON health_platform_dev.* TO health_platform_user@'%';
+GRANT ALL PRIVILEGES ON health_platform_test.* TO health_platform_user@'%';
+FLUSH PRIVILEGES;
 
--- Set timezone
-SET timezone = 'UTC';
-
--- Log successful initialization
-\echo 'Database initialized successfully for Rejuve Meds development' 
+-- Success message
+\echo 'Database initialized successfully for Health Platform development' 

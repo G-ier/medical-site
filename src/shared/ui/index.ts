@@ -79,6 +79,7 @@ export { InfoBar, infoBarVariants } from "./info-bar"
 export type { InfoBarProps } from "./info-bar"
 export { HeroSection, heroSectionVariants } from "./hero-section"
 export { WeightLossHeroSection, type WeightLossHeroSectionProps, type TrustFeatureItem } from "./weight-loss-hero-section"
+export { WeightLossIntroSection, type WeightLossIntroSectionProps } from "./weight-loss-intro-section"
 export { ContactHeroSection, type ContactHeroSectionProps } from "./contact-hero-section"
 export { TrustFeatures } from "./trust-features"
 export { TreatmentBenefitsSection, type TreatmentBenefit, type TreatmentBenefitsSectionProps } from "./treatment-benefits-section"
@@ -114,7 +115,7 @@ export {
 
 // New components
 export { ValueProposition } from "./value-proposition"
-export { WhyChooseRejuveSection } from "./why-choose-rejuve-section"
+export { WhyChooseSection } from "./why-choose-rejuve-section"
 export { FAQItem, faqItemVariants } from "./faq-item"
 export { FAQSection, faqSectionVariants } from "./faq-section"
 
@@ -129,6 +130,6 @@ export { Footer } from "./footer"
 
 // Types
 export type { ValuePropositionProps } from "./value-proposition"
-export type { WhyChooseRejuveSectionProps } from "./why-choose-rejuve-section"
+export type { WhyChooseSectionProps } from "./why-choose-rejuve-section"
 export type { FAQItemProps } from "./faq-item"
 export type { FAQSectionProps, FAQItemData } from "./faq-section"

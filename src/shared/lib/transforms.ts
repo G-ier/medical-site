@@ -214,6 +214,7 @@ export function transformHomepageData(sanityData: Homepage | null) {
   }
   
   return {
+    weightLossIntroSection: sanityData.weightLossIntroSection || null,
     heroSection: transformHeroSection(sanityData.heroSection),
     treatmentsSection: transformTreatmentsSection(sanityData.treatmentsSection),
     categoriesSection: transformCategoriesSection(sanityData.categoriesSection),

@@ -6,7 +6,7 @@ import { Heading, Text } from "./typography"
 import { ValueProposition, type ValuePropositionProps } from "./value-proposition"
 import { renderStyledText } from "@/shared/ui/render-styled-text"
 
-const whyChooseRejuveSectionVariants = cva(
+const whyChooseSectionVariants = cva(
   "",
   {
     variants: {
@@ -22,8 +22,8 @@ const whyChooseRejuveSectionVariants = cva(
   }
 )
 
-export interface WhyChooseRejuveSectionProps extends 
-  VariantProps<typeof whyChooseRejuveSectionVariants> {
+export interface WhyChooseSectionProps extends 
+  VariantProps<typeof whyChooseSectionVariants> {
   // Section content
   title: string
   subtitle: string
@@ -35,17 +35,17 @@ export interface WhyChooseRejuveSectionProps extends
   className?: string
 }
 
-function WhyChooseRejuveSection({
+function WhyChooseSection({
   title,
   subtitle,
   valuePropositions,
   background,
   className,
   ...props
-}: WhyChooseRejuveSectionProps) {
+}: WhyChooseSectionProps) {
   return (
     <Section 
-      className={cn(whyChooseRejuveSectionVariants({ background }), 'py-0', className)}
+      className={cn(whyChooseSectionVariants({ background }), 'py-0', className)}
       {...props}
     >
       <Container maxWidth="9xl" className="px-4">
@@ -120,4 +120,4 @@ function WhyChooseRejuveSection({
   )
 }
 
-export { WhyChooseRejuveSection, whyChooseRejuveSectionVariants }
+export { WhyChooseSection, whyChooseSectionVariants }

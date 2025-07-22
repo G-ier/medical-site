@@ -1,48 +1,50 @@
 #!/bin/bash
+# Health Platform - Deployment Script
 
-# Rejuve Meds - Deployment Script
-# This script deploys the existing Next.js application with all dependencies
-
-set -e  # Exit on any error
-
-# Colors for output
-RED='\033[0;31m'
-GREEN='\033[0;32m'
-YELLOW='\033[1;33m'
-BLUE='\033[0;34m'
-NC='\033[0m' # No Color
-
-# Functions
-print_step() {
-    echo -e "${BLUE}==== $1 ====${NC}"
-}
-
+# Function to print colored output
 print_success() {
-    echo -e "${GREEN}✓ $1${NC}"
-}
-
-print_warning() {
-    echo -e "${YELLOW}⚠ $1${NC}"
+    echo -e "\033[32m✓ $1\033[0m"
 }
 
 print_error() {
-    echo -e "${RED}✗ $1${NC}"
+    echo -e "\033[31m✗ $1\033[0m"
 }
 
-# Check if command exists
-check_command() {
-    if ! command -v $1 &> /dev/null; then
-        print_error "$1 is not installed. Please install it first."
-        exit 1
-    fi
+print_info() {
+    echo -e "\033[34mℹ $1\033[0m"
 }
+
+print_warning() {
+    echo -e "\033[33m⚠ $1\033[0m"
+}
+
+print_step() {
+    echo -e "\033[35m▶ $1\033[0m"
+}
+
+# Colors for section headers
+print_header() {
+    echo ""
+    echo -e "\033[46m\033[30m                                          \033[0m"
+    echo -e "\033[46m\033[30m  $1  \033[0m"
+    echo -e "\033[46m\033[30m                                          \033[0m"
+    echo ""
+}
+
+# Check if running as root
+if [ "$EUID" -eq 0 ]; then
+    print_error "This script should not be run as root"
+    exit 1
+fi
 
 # Configuration
+PROJECT_DIR="/var/www/health-platform"
+BACKUP_DIR="/home/$(whoami)/backups"
 NODE_VERSION="18"
-PNPM_VERSION="8"
-APP_PORT="3000"
 
-print_step "Starting Rejuve Meds Deployment"
+print_header "Health Platform Deployment"
+
+print_step "Starting Health Platform Deployment"
 
 # Check prerequisites
 print_step "Checking Prerequisites"
@@ -85,14 +87,14 @@ print_success "Application built successfully"
 print_step "Starting Application with PM2"
 
 # Stop existing PM2 processes
-pm2 stop rejuve-meds 2>/dev/null || true
-pm2 delete rejuve-meds 2>/dev/null || true
+pm2 stop health-platform 2>/dev/null || true
+pm2 delete health-platform 2>/dev/null || true
 
 # Create PM2 ecosystem file
 cat > ecosystem.config.js << 'EOF'
 module.exports = {
   apps: [{
-    name: 'rejuve-meds',
+    name: 'health-platform',
     script: 'pnpm',
     args: 'start',
     cwd: process.cwd(),
@@ -120,7 +122,10 @@ EOF
 mkdir -p logs
 
 # Start application with PM2
-pm2 start ecosystem.config.js
+pm2 start ecosystem.config.js --only health-platform || {
+    print_error "Failed to start with ecosystem config, trying direct start..."
+    pm2 start npm --name "health-platform" -- start
+}
 
 print_success "Application started with PM2"
 
@@ -132,16 +137,16 @@ if curl -f -s "http://localhost:${APP_PORT}" > /dev/null 2>&1; then
 else
     print_error "Application health check failed"
     print_error "PM2 logs:"
-    pm2 logs rejuve-meds --lines 10
+    pm2 logs health-platform --lines 10
     exit 1
 fi
 
 # Create stop script
 cat > stop-app.sh << 'EOF'
 #!/bin/bash
-echo "Stopping Rejuve Meds application..."
-pm2 stop rejuve-meds 2>/dev/null || true
-pm2 delete rejuve-meds 2>/dev/null || true
+echo "Stopping Health Platform application..."
+pm2 stop health-platform 2>/dev/null || true
+pm2 delete health-platform 2>/dev/null || true
 echo "Application stopped"
 EOF
 
@@ -150,27 +155,27 @@ chmod +x stop-app.sh
 # Create status check script
 cat > status.sh << 'EOF'
 #!/bin/bash
-echo "=== Rejuve Meds Status ==="
+echo "=== Health Platform Status ==="
 
 # Check PM2 process
-if pm2 list | grep -q "rejuve-meds"; then
+if pm2 list | grep -q "health-platform"; then
     echo "✓ Application: Running via PM2"
     echo "  URL: http://localhost:3000"
     echo ""
-    pm2 info rejuve-meds
+    pm2 info health-platform
 else
     echo "✗ Application: Not running"
 fi
 
 echo ""
 echo "=== Recent Application Logs ==="
-pm2 logs rejuve-meds --lines 10 2>/dev/null || echo "No logs available"
+pm2 logs health-platform --lines 10 2>/dev/null || echo "No logs available"
 EOF
 
 chmod +x status.sh
 
 print_step "Deployment Complete"
-print_success "Rejuve Meds has been successfully deployed!"
+print_success "Health Platform has been successfully deployed!"
 echo ""
 echo -e "${GREEN}Application URL: http://localhost:${APP_PORT}${NC}"
 echo -e "${GREEN}Process Manager: PM2${NC}"
@@ -178,8 +183,8 @@ echo ""
 echo "Management Commands:"
 echo "  - Check status: ./status.sh"
 echo "  - Stop application: ./stop-app.sh"
-echo "  - View logs: pm2 logs rejuve-meds"
-echo "  - Restart app: pm2 restart rejuve-meds"
+echo "  - View logs: pm2 logs health-platform"
+echo "  - Restart app: pm2 restart health-platform"
 echo "  - PM2 monitoring: pm2 monit"
 echo ""
 echo "Important Notes:"

@@ -12,7 +12,7 @@ export function EthnicitySelection({ className }: EthnicitySelectionProps) {
   return (
     <CheckboxAssessment
       title={<GradientText gradient="purple-blue">
-        Rejuve
+        our platform
       </GradientText>}
       question="How would you describe your ethnicity?"
       description="We ask this to better tailor treatment options to you. Please select all that apply."

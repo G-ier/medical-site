@@ -55,9 +55,27 @@ export function getSanityImageUrl(source: any): string {
 }
 
 // Query for homepage data
-export const HOMEPAGE_QUERY = `*[_type == "homepage"][0]{
+export const HOMEPAGE_QUERY = `*[_type == "homePage"][0]{
   _id,
   title,
+  weightLossIntroSection{
+    title,
+    subtitle,
+    medications[]{
+      title,
+      price,
+      cta{
+        text,
+        href
+      },
+      image{
+        asset->,
+        alt,
+        width,
+        height
+      }
+    }
+  },
   heroSection{
     heroTitle,
     subtitle,

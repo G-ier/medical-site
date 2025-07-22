@@ -1,4 +1,4 @@
-import { auth0 } from '../auth0';
+import { auth0Config } from '../auth0';
 import { NextRequest } from 'next/server';
 
 export interface Auth0User {
@@ -19,11 +19,13 @@ export interface Auth0TokenValidation {
 /**
  * Auth0 Integration Service
  * Handles proper Auth0 token verification and user data extraction
+ * Updated to work with custom Auth0 implementation
  */
 export class Auth0Integration {
   
   /**
    * Get Auth0 session from request
+   * Note: This is a simplified implementation for the custom Auth0 setup
    */
   static async getAuth0Session(request: NextRequest): Promise<{
     isAuthenticated: boolean;
@@ -32,24 +34,38 @@ export class Auth0Integration {
     error?: string;
   }> {
     try {
-      // Get session using Auth0 SDK
-      const session = await auth0.getSession(request);
+      // This application uses custom Auth0 implementation
+      // Auth0 session is handled through custom callback and JWT tokens
+      // For direct Auth0 session checking, we'd need to call the profile endpoint
       
-      if (!session || !session.user) {
+      const baseUrl = `${request.headers.get('x-forwarded-proto') || 'https'}://${request.headers.get('x-forwarded-host') || request.headers.get('host')}`;
+      
+      try {
+        const profileResponse = await fetch(new URL('/auth/profile', baseUrl), {
+          headers: {
+            'cookie': request.headers.get('cookie') || ''
+          }
+        });
+
+        if (!profileResponse.ok) {
+          return {
+            isAuthenticated: false,
+            error: 'No Auth0 session found'
+          };
+        }
+
+        const userProfile = await profileResponse.json();
+        
+        return {
+          isAuthenticated: true,
+          user: userProfile as Auth0User
+        };
+      } catch (fetchError) {
         return {
           isAuthenticated: false,
-          error: 'No Auth0 session found'
+          error: 'Failed to fetch Auth0 profile'
         };
       }
-
-      // Get access token
-      const accessTokenResult = await auth0.getAccessToken();
-
-      return {
-        isAuthenticated: true,
-        user: session.user as Auth0User,
-        accessToken: accessTokenResult?.token
-      };
 
     } catch (error) {
       console.error('❌ Auth0 session error:', error);
@@ -99,8 +115,8 @@ export class Auth0Integration {
       }
 
       // Validate audience and issuer (if configured)
-      const expectedAudience = process.env.AUTH0_AUDIENCE;
-      const expectedIssuer = process.env.AUTH0_ISSUER_BASE_URL;
+      const expectedAudience = auth0Config.authorizationParams?.audience;
+      const expectedIssuer = auth0Config.issuerBaseURL;
 
       if (expectedAudience && payload.aud !== expectedAudience) {
         return {
@@ -166,15 +182,15 @@ export class Auth0Integration {
    */
   static async getManagementToken(): Promise<string | null> {
     try {
-      const response = await fetch(`${process.env.AUTH0_ISSUER_BASE_URL}/oauth/token`, {
+      const response = await fetch(`${auth0Config.issuerBaseURL}/oauth/token`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          client_id: process.env.AUTH0_CLIENT_ID,
-          client_secret: process.env.AUTH0_CLIENT_SECRET,
-          audience: `${process.env.AUTH0_ISSUER_BASE_URL}/api/v2/`,
+          client_id: auth0Config.clientID,
+          client_secret: auth0Config.clientSecret,
+          audience: `${auth0Config.issuerBaseURL}/api/v2/`,
           grant_type: 'client_credentials'
         })
       });
@@ -206,7 +222,7 @@ export class Auth0Integration {
       }
 
       const response = await fetch(
-        `${process.env.AUTH0_ISSUER_BASE_URL}/api/v2/users/${encodeURIComponent(userId)}`,
+        `${auth0Config.issuerBaseURL}/api/v2/users/${encodeURIComponent(userId)}`,
         {
           method: 'PATCH',
           headers: {
@@ -238,7 +254,7 @@ export class Auth0Integration {
       }
 
       const response = await fetch(
-        `${process.env.AUTH0_ISSUER_BASE_URL}/api/v2/users/${encodeURIComponent(userId)}`,
+        `${auth0Config.issuerBaseURL}/api/v2/users/${encodeURIComponent(userId)}`,
         {
           headers: {
             'Authorization': `Bearer ${managementToken}`,

@@ -1,7 +1,7 @@
 import { MetadataRoute } from 'next'
 import { client } from '@/shared/lib/sanity'
 
-const baseUrl = 'https://rejuvemeds.com'
+const baseUrl = 'https://localhost:3004'
 
 // Static pages
 const staticPages = [

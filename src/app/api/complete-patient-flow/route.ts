@@ -66,6 +66,7 @@ interface CompletePatientFlowResponse {
     updatedPatient: UpdatePatientResult;
     metricsResult: MetricsResult;
     formSubmissionResult: FormSubmissionResult;
+    documentUploadResult: FormSubmissionResult;
     dbPatient: DBPatient;
     medicationData: MedicationData;
   };
@@ -407,6 +408,74 @@ export async function POST(
       formSubmissionResult = { message: "No intake form data available" };
     }
 
+    // Step 8.5: Handle document upload if available
+    const documentData = await FormDataService.getFormDataByType(
+      user.id,
+      FormType.OHL_DOCUMENT_UPLOAD
+    );
+    let documentUploadResult = null;
+
+    if (documentData.length > 0) {
+      const documentFormData = documentData[0].formData as any;
+      
+      if (documentFormData.file_string && documentFormData.display_name) {
+        console.log('📤 Processing document upload for patient:', healthiePatientId);
+        
+        try {
+          // Prepare document payload for Healthie
+          const documentPayload = {
+            file_string: documentFormData.file_string,
+            display_name: documentFormData.display_name,
+            include_in_charting: documentFormData.include_in_charting ?? true
+          };
+
+          const documentResponse = await fetch(
+            new URL(
+              `http://localhost:${process.env.PORT}/api/healthie/patients/${healthiePatientId}/documents`,
+              request.url
+            ),
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(documentPayload),
+            }
+          );
+
+          if (documentResponse.ok) {
+            documentUploadResult = await documentResponse.json();
+            console.log('✅ Document uploaded successfully to Healthie:', documentUploadResult);
+          } else {
+            const errorData = await documentResponse.json();
+            console.error("❌ Failed to upload document to Healthie:", errorData);
+            documentUploadResult = {
+              success: false,
+              error: "Failed to upload document to Healthie",
+              details: errorData,
+            };
+          }
+        } catch (error) {
+          console.error("❌ Document upload error:", error);
+          documentUploadResult = {
+            success: false,
+            error: "Document upload failed",
+            details: error instanceof Error ? error.message : "Unknown error",
+          };
+        }
+      } else {
+        documentUploadResult = {
+          success: false,
+          error: "Invalid document data: missing file_string or display_name"
+        };
+      }
+    } else {
+      documentUploadResult = { 
+        success: true, 
+        message: "No document upload data available - skipping document upload" 
+      };
+    }
+
     // Step 9: Create patient in our database
     let dbPatient = null;
     let medicalRecord = null;
@@ -457,6 +526,7 @@ export async function POST(
         update_patient: updatePatientData[0]?.formData,
         healthie_metrics: metricsData[0]?.formData,
         ohl_initial_intake: intakeData[0]?.formData,
+        ohl_document_upload: documentData[0]?.formData,
       };
 
       medicalRecord = await PatientService.createMedicalRecord(dbPatient.id, {
@@ -532,6 +602,7 @@ export async function POST(
         updatedPatient: updatedPatientResult,
         metricsResult,
         formSubmissionResult,
+        documentUploadResult,
         dbPatient: dbPatientResult,
         medicationData: medicationResult,
       },

@@ -14,7 +14,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Rejuve Meds - Personalized Health Solutions",
+  title: "Health Platform - Personalized Health Solutions",
   description:
     "Transform your health journey with personalized medication and wellness solutions.",
 };

@@ -47,7 +47,7 @@ export function MentalHealthDiagnosis({ className }: MentalHealthDiagnosisProps)
     return (
         <QAPageTemplate
             title={<GradientText gradient="purple-blue">
-                Rejuve
+                our platform
             </GradientText>}
             titleClassName="font-[500] tracking-wide text-[24px]"
             question="Have you been diagnosed with a mental health condition?"

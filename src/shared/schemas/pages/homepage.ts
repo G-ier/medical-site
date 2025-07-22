@@ -15,6 +15,12 @@ export const homepageSchema = defineType({
     },
 
     {
+      name: 'weightLossIntroSection',
+      title: 'Weight Loss Intro Section',
+      type: 'weightLossIntroSection',
+      description: 'Weight loss introduction section before the hero',
+    },
+    {
       name: 'heroSection',
       title: 'Hero Section',
       type: 'heroSection',
